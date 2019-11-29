@@ -10,19 +10,26 @@ package fr.miralak.algo.perlocation;
  */
 public class Percolation {
 
+    int topVirtualRoot = 0;
+    private int gridSize = 0;
+    int topBottomRoot = 0;
     // We represent the grid in a array
     // The grid size is n
     // One grid site is defined with X and Y values: X is horizontal position and Y vertical position
-    // A site position in the array is "(X-n) + (Y*n)-1" as site starts from 0 in the array
+    // A site position in the array is "(row-n) + (col*n)-1" as site starts from 0 in the array
     private int[] gridArray;
-    private int gridSize = 0;
+    private UnionFind unionFindAlgorithm;
 
     // creates n-by-n grid, with all sites initially blocked: 0 for blocked and 1 for open
     public Percolation(int n) {
         gridSize = n;
-        gridArray = new int[n];
+        unionFindAlgorithm.initUnionFind(n * n + 2); // we add two element for virtual top root and virtual bottom root
+        // we connect all top node to virtual top root
+        topVirtualRoot = n * n + 1;
+        topBottomRoot = n * n + 2;
         for (int i = 0; i < n; i++) {
-            gridArray[i] = 0;
+            unionFindAlgorithm.union(topVirtualRoot, i);
+            unionFindAlgorithm.union(topBottomRoot, getIndex(n, i));
         }
     }
 

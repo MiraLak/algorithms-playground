@@ -16,22 +16,29 @@ public class UnionFind {
         }
     }
 
-    // find: O(N)
+    // find: O(log N)
     public boolean connected(int p, int q) {
         return root(p) == root(q);
     }
 
-    // union: O(N)
+    // union: O(log N) + finding roots cost
     public void union(int p, int q) {
         int i = root(p);
         int j = root(q);
         if (i == j) return;
-        id[i] = j;
+        if (sz[i] < sz[j]) {
+            id[i] = j;
+            sz[j] += sz[i];
+        } else {
+            id[j] = i;
+            sz[i] += sz[j];
+        }
     }
 
     // find: best O(1), worst O(N)
     private int root(int i) {
         while (i != id[i]) {
+            id[i] = id[id[i]];
             i = id[i];
         }
         return i;
