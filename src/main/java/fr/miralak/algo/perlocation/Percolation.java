@@ -41,8 +41,8 @@ public class Percolation {
         }
         gridArray[topVirtualRoot] = 1;
         gridArray[bottomVirtualRoot] = 1;
-        for (int i = 0; i < n; i++) {
-            unionFindAlgorithm.union(topVirtualRoot, i);
+        for (int i = 1; i <= n; i++) {
+            unionFindAlgorithm.union(topVirtualRoot, getIndex(1, i));
             unionFindAlgorithm.union(bottomVirtualRoot, getIndex(n, i));
         }
     }
@@ -60,7 +60,7 @@ public class Percolation {
         System.out.println("The grid with size " + gridSize + " is initialized");
         System.out.println("Enter the coordinates to open a site in this order: row col");
 
-        while (!perlocationDone && scanner.hasNextLine()) {
+        while (!perlocationDone) {
             String[] tokens = scanner.nextLine().split("\\s");
             int row = Integer.parseInt(tokens[0]);
             int col = Integer.parseInt(tokens[1]);
@@ -73,6 +73,7 @@ public class Percolation {
 
             if (percolation.percolates()) {
                 perlocationDone = true;
+                System.out.println("The grid perlocate! Hourra!!!");
             } else {
                 System.out.println("Enter the coordinates to open a site in this order: row col");
             }
@@ -107,12 +108,12 @@ public class Percolation {
                 unionFindAlgorithm.union(index, index + 1);
             }
             // top neighbour
-            if (index - gridSize > 0 && isOpen(row - gridSize, col)) {
-                unionFindAlgorithm.union(index, index - 1);
+            if (index - gridSize > 0 && isOpen(row - 1, col)) {
+                unionFindAlgorithm.union(index, index - gridSize);
             }
             // bottom neighbour
-            if (index + gridSize < gridArray.length - 2 && isOpen(row + gridSize, col)) {
-                unionFindAlgorithm.union(index, index - 1);
+            if (index + gridSize < gridArray.length - 2 && isOpen(row + 1, col)) {
+                unionFindAlgorithm.union(index, index + gridSize);
             }
         }
     }
@@ -133,6 +134,6 @@ public class Percolation {
     }
 
     private int getIndex(int row, int col) {
-        return (row - gridSize) + (col * gridSize) - 1;
+        return (col - gridSize) + (row * gridSize) - 1;
     }
 }
