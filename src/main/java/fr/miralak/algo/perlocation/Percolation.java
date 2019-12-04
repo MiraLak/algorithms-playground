@@ -27,6 +27,9 @@ public class Percolation {
 
     // creates n-by-n grid, with all sites initially blocked: 0 for blocked and 1 for open
     public Percolation(int n) {
+        if (n <= 0) {
+            throw new IllegalArgumentException("The grid size must be at least 1");
+        }
         gridSize = n;
         gridArray = new int[n * n + 2];
         unionFindAlgorithm.initUnionFind(n * n + 2); // we add two element for virtual top root and virtual bottom root
@@ -86,12 +89,14 @@ public class Percolation {
 
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
+        checkCoordinates(row, col);
         int index = getIndex(row, col);
         return gridArray[index] == 1;
     }
 
     // opens the site (row, col) if it is not open already
     public void open(int row, int col) {
+        checkCoordinates(row, col);
         if (!isOpen(row, col)) {
             // set status to open (1)
             int index = getIndex(row, col);
@@ -120,7 +125,14 @@ public class Percolation {
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
+        checkCoordinates(row, col);
         return unionFindAlgorithm.connected(getIndex(row, col), topVirtualRoot);
+    }
+
+    private void checkCoordinates(int row, int col) {
+        if (row < 0 || row > gridSize || col < 0 || col > gridSize) {
+            throw new IllegalArgumentException("row and col values must be between 1 and " + gridSize);
+        }
     }
 
     // returns the number of open sites
